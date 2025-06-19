@@ -24,12 +24,18 @@ exporters:
     endpoint: "http://tempo:4317"
     tls:
       insecure: true
+  otlphttp/mackerel:
+    endpoint: "https://otlp-vaxila.mackerelio.com"
+    headers:
+      Accept: "*/*"
+      "Mackerel-Api-Key": ${env:MACKEREL_APIKEY}
 
 service:
   pipelines:
     traces:
       receivers: [otlp]
       processors: [memory_limiter, transform, batch]
+      # exporters: [otlp, debug, spanmetrics, zipkin, otlp/tempo, otlphttp/mackerel]
       exporters: [otlp, debug, spanmetrics, zipkin, otlp/tempo]
     metrics:
       receivers: [hostmetrics, docker_stats, httpcheck/frontend-proxy, otlp, redis, spanmetrics]
