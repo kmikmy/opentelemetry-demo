@@ -29,13 +29,23 @@ exporters:
     headers:
       Accept: "*/*"
       "Mackerel-Api-Key": ${env:MACKEREL_APIKEY}
+  datadog:
+    api:
+      site: "ap1.datadoghq.com"
+      key: "${env:DATADOG_APIKEY}"
 
 service:
   pipelines:
     traces:
       receivers: [otlp]
       processors: [memory_limiter, transform, batch]
+      # Exporting to mackerel
       # exporters: [otlp, debug, spanmetrics, zipkin, otlp/tempo, otlphttp/mackerel]
+      #
+      # Exporting Datadog
+      # exporters: [otlp, debug, spanmetrics, zipkin, otlp/tempo, datadog]
+      #
+      # Exporting only OSS
       exporters: [otlp, debug, spanmetrics, zipkin, otlp/tempo]
     metrics:
       receivers: [hostmetrics, docker_stats, httpcheck/frontend-proxy, otlp, redis, spanmetrics]
