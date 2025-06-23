@@ -33,6 +33,10 @@ exporters:
     api:
       site: "ap1.datadoghq.com"
       key: "${env:DATADOG_APIKEY}"
+  otlp/honeycomb:
+    endpoint: "api.honeycomb.io:443"
+    headers:
+      "x-honeycomb-team": "${env:HONEYCOMB_APIKEY}"
 
 service:
   pipelines:
@@ -44,6 +48,9 @@ service:
       #
       # Exporting Datadog
       # exporters: [otlp, debug, spanmetrics, zipkin, otlp/tempo, datadog]
+      #
+      # Exporting Honeycomb
+      # exporters: [otlp, debug, spanmetrics, zipkin, otlp/tempo, otlp/honeycomb]
       #
       # Exporting only OSS
       exporters: [otlp, debug, spanmetrics, zipkin, otlp/tempo]

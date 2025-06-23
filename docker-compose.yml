@@ -782,6 +782,7 @@ services:
       - GOMEMLIMIT=160MiB
       - MACKEREL_APIKEY
       - DATADOG_APIKEY
+      - HONEYCOMB_APIKEY
 
   # Prometheus
   prometheus:
