@@ -352,6 +352,8 @@ services:
       - FLAGD_PORT
       - FLAGD_UI_HOST
       - FLAGD_UI_PORT
+      - ZIPKIN_HOST
+      - ZIPKIN_PORT
     depends_on:
       frontend:
         condition: service_started
@@ -362,6 +364,8 @@ services:
       grafana:
         condition: service_started
       flagd-ui:
+        condition: service_started
+      zipkin:
         condition: service_started
     dns_search: ""
 
@@ -776,6 +780,9 @@ services:
       - OTEL_COLLECTOR_PORT_GRPC
       - OTEL_COLLECTOR_PORT_HTTP
       - GOMEMLIMIT=160MiB
+      - MACKEREL_APIKEY
+      - DATADOG_APIKEY
+      - HONEYCOMB_APIKEY
 
   # Prometheus
   prometheus:
@@ -836,4 +843,27 @@ services:
       interval: 5s
       timeout: 10s
       retries: 10
+    logging: *logging
+
+  # Zipkin
+  zipkin:
+    image: ${ZIPKIN_IMAGE}
+    container_name: zipkin
+    restart: unless-stopped
+    ports:
+      - "${ZIPKIN_PORT}"  # Zipkin UI
+    logging: *logging
+
+  # Tempo
+  tempo:
+    image: ${TEMPO_IMAGE}
+    container_name: tempo
+    restart: unless-stopped
+    command: ["-config.file=/etc/tempo.yaml"]
+    volumes:
+      - ./src/tempo/tempo.yaml:/etc/tempo.yaml
+    ports:
+      - "${TEMPO_HTTP_PORT}"  # Tempo HTTP
+      - "${OTEL_COLLECTOR_PORT_GRPC}"  # OTLP gRPC
+      - "${OTEL_COLLECTOR_PORT_HTTP}"  # OTLP HTTP
     logging: *logging
