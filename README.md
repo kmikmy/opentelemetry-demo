@@ -1,4 +1,26 @@
 <!-- markdownlint-disable-next-line -->
+
+# OpenTelemetry を利用したトレースプラットフォームの検証用リポジトリ
+
+https://github.com/open-telemetry/opentelemetry-demo の fork リポジトリ。
+
+既存の Zipkin, Jaeger に加えて、Grafana tempo, Mackerel(要APIキー), Datadog(要APIキー), Honeycomb(要APIキー) を利用するための設定を含みます
+
+動かし方
+```
+# .env を作成し、必要に応じて API キーを設定
+$ cp .env.sample .env
+
+# envoy image のローカルビルド
+$ docker compose build frontend-proxy
+
+# 起動
+$ make start
+
+# 終了
+$ make stop
+```
+
 # <img src="https://opentelemetry.io/img/logos/opentelemetry-logo-nav.png" alt="OTel logo" width="45"> OpenTelemetry Demo
 
 [![Slack](https://img.shields.io/badge/slack-@cncf/otel/demo-brightgreen.svg?logo=slack)](https://cloud-native.slack.com/archives/C03B4CWV4DA)
